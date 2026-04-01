@@ -1,4 +1,5 @@
 <script>
+document.addEventListener("DOMContentLoaded", () => {
   const params = new URLSearchParams(window.location.search);
   const sessionId = params.get("session_id");
   const statusEl = document.getElementById("status");
@@ -11,11 +12,6 @@
   async function loadPin() {
     try {
       const res = await fetch(`${endpoint}?session_id=${encodeURIComponent(sessionId)}`);
-
-      if (!res.ok) {
-        throw new Error(`Network response not ok: ${res.status}`);
-      }
-
       const data = await res.json();
 
       if (data.pin) {
@@ -31,8 +27,7 @@
       }
 
       statusEl.textContent =
-        "Your payment is complete, but the PIN is not ready yet. Please contact support if this persists.";
-
+        "Your payment is complete, but the PIN is not ready yet.";
     } catch (e) {
       console.error(e);
       statusEl.textContent = "Could not load your PIN.";
@@ -44,4 +39,5 @@
   } else {
     loadPin();
   }
+});
 </script>
