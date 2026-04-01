@@ -1,67 +1,47 @@
-<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <title>Your PIN - AST Networks</title>
-</head>
-<body>
-  <h1>Payment successful - AST Networks</h1>
-  <p id="status">Loading your PIN...</p>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const sessionId = params.get("session_id");
+  const statusEl = document.getElementById("status");
 
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const sessionId = params.get("session_id");
-    const statusEl = document.getElementById("status");
+  const endpoint = "https://rqwtesbhddfbklpkrlcv.supabase.co/functions/v1/get-pin";
 
-    // EDGE FUNCTION endpoint — replace with your project URL
-    const endpoint = "https://rqwtesbhddfbklpkrlcv.supabase.co/functions/v1/get-pin";
+  let tries = 0;
+  const maxTries = 10;
 
-    // Supabase anon key — safe for client
-    const SUPABASE_ANON_KEY = "45e7f9a6df800e7ff49b901db3a181530041dde8855f1e69dafa24c62f8ed4d2";
+  async function loadPin() {
+    try {
+      const res = await fetch(`${endpoint}?session_id=${encodeURIComponent(sessionId)}`);
 
-    let tries = 0;
-    const maxTries = 10;
-
-    async function loadPin() {
-      try {
-        const res = await fetch(`${endpoint}?session_id=${encodeURIComponent(sessionId)}`, {
-          headers: {
-            "apikey": SUPABASE_ANON_KEY,
-            "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
-          }
-        });
-
-        if (!res.ok) {
-          throw new Error(`Network response not ok: ${res.status}`);
-        }
-
-        const data = await res.json();
-
-        if (data.pin) {
-          statusEl.textContent = `Your PIN: ${data.pin}`;
-          return;
-        }
-
-        if (data.status === "pending" && tries < maxTries) {
-          tries++;
-          statusEl.textContent = "Finalizing your PIN, please wait...";
-          setTimeout(loadPin, 1000); // poll every second
-          return;
-        }
-
-        statusEl.textContent =
-          "Your payment is complete, but the PIN is not ready yet. Please contact support if this persists.";
-      } catch (e) {
-        console.error(e);
-        statusEl.textContent = "Could not load your PIN.";
+      if (!res.ok) {
+        throw new Error(`Network response not ok: ${res.status}`);
       }
-    }
 
-    if (!sessionId) {
-      statusEl.textContent = "Missing session ID.";
-    } else {
-      loadPin();
+      const data = await res.json();
+
+      if (data.pin) {
+        statusEl.textContent = `Your PIN: ${data.pin}`;
+        return;
+      }
+
+      if (data.status === "pending" && tries < maxTries) {
+        tries++;
+        statusEl.textContent = "Finalizing your PIN, please wait...";
+        setTimeout(loadPin, 1000);
+        return;
+      }
+
+      statusEl.textContent =
+        "Your payment is complete, but the PIN is not ready yet. Please contact support if this persists.";
+
+    } catch (e) {
+      console.error(e);
+      statusEl.textContent = "Could not load your PIN.";
     }
-  </script>
-</body>
-</html>
+  }
+
+  if (!sessionId) {
+    statusEl.textContent = "Missing session ID.";
+  } else {
+    loadPin();
+  }
+</script>
