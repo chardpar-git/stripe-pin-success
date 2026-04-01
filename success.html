@@ -5,54 +5,57 @@
   <title>Your PIN - AST Networks</title>
 </head>
 <body>
-
   <h1>Payment successful - AST Networks</h1>
   <p id="status">Loading your PIN...</p>
 
   <script>
-    window.onload = function () {
-      const statusEl = document.getElementById("status");
+    const params = new URLSearchParams(window.location.search);
+    const sessionId = params.get("session_id");
+    const statusEl = document.getElementById("status");
 
-      const params = new URLSearchParams(window.location.search);
-      const sessionId = params.get("session_id");
+    // ✅ CORRECT endpoint (Edge Function)
+    const endpoint = "https://rqwtesbhddfbklpkrlcv.supabase.co/functions/v1/get-pin";
 
-      const endpoint = "https://rqwtesbhddfbklpkrlcv.supabase.co/functions/v1/get-pin";
+    let tries = 0;
+    const maxTries = 15; // increased retries
 
-      let tries = 0;
-      const maxTries = 10;
+    async function loadPin() {
+      try {
+        const res = await fetch(`${endpoint}?session_id=${encodeURIComponent(sessionId)}`);
 
-      async function loadPin() {
-        try {
-          const res = await fetch(`${endpoint}?session_id=${encodeURIComponent(sessionId)}`);
-          const data = await res.json();
-
-          if (data.pin) {
-            statusEl.textContent = "Your PIN: " + data.pin;
-            return;
-          }
-
-          if (data.status === "pending" && tries < maxTries) {
-            tries++;
-            statusEl.textContent = "Finalizing your PIN, please wait...";
-            setTimeout(loadPin, 1000);
-            return;
-          }
-
-          statusEl.textContent = "PIN not ready yet.";
-
-        } catch (e) {
-          console.error(e);
-          statusEl.textContent = "ERROR: " + e.message;
+        if (!res.ok) {
+          throw new Error("Network error");
         }
-      }
 
-      if (!sessionId) {
-        statusEl.textContent = "Missing session ID";
-      } else {
-        loadPin();
+        const data = await res.json();
+
+        console.log("Response:", data); // for debugging
+
+        if (data.pin) {
+          statusEl.textContent = `✅ Your PIN: ${data.pin}`;
+          return;
+        }
+
+        if (data.status === "pending" && tries < maxTries) {
+          tries++;
+          statusEl.textContent = "⏳ Finalizing your PIN, please wait...";
+          setTimeout(loadPin, 1500);
+          return;
+        }
+
+        statusEl.textContent =
+          "⚠️ Payment complete, but PIN not ready. Please refresh or contact support.";
+      } catch (e) {
+        console.error(e);
+        statusEl.textContent = "❌ Error loading PIN. Please refresh.";
       }
-    };
+    }
+
+    if (!sessionId) {
+      statusEl.textContent = "❌ Missing session ID.";
+    } else {
+      loadPin();
+    }
   </script>
-
 </body>
 </html>
