@@ -1,61 +1,244 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>Your PIN - AST Networks</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AST Networks - PIN Delivery</title>
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(135deg, #0f172a, #1e3a8a);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+
+  .card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.30);
+  }
+
+  .logo {
+    font-size: 34px;
+    margin-bottom: 15px;
+  }
+
+  h1 {
+    color: #16a34a;
+    margin-bottom: 10px;
+  }
+
+  p {
+    color: #555;
+  }
+
+  .pin-box {
+    background: #f8fafc;
+    border: 3px dashed #2563eb;
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    font-size: 38px;
+    font-weight: bold;
+    color: #2563eb;
+    letter-spacing: 5px;
+  }
+
+  button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 5px;
+  }
+
+  button:hover {
+    opacity: 0.9;
+  }
+
+  .print-btn {
+    background: #16a34a;
+  }
+
+  .copy-message {
+    color: #16a34a;
+    font-weight: bold;
+    margin-top: 20px;
+    display: none;
+  }
+
+  .footer {
+    margin-top: 30px;
+    color: #777;
+    font-size: 14px;
+  }
+
+  .spinner {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #2563eb;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    margin: 25px auto;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .card {
+      padding: 30px 20px;
+    }
+
+    .pin-box {
+      font-size: 30px;
+      letter-spacing: 3px;
+    }
+
+    button {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  }
+</style>
 </head>
+
 <body>
-  <h1>Payment successful - AST Networks</h1>
-  <p id="status">Loading your PIN...</p>
 
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const sessionId = params.get("session_id");
-    const statusEl = document.getElementById("status");
+<div class="card">
 
-    // ✅ CORRECT endpoint (Edge Function)
-    const endpoint = "https://rqwtesbhddfbklpkrlcv.supabase.co/functions/v1/get-pin";
+  <div class="logo">🌐 AST Networks</div>
 
-    let tries = 0;
-    const maxTries = 15; // increased retries
+  <h1>Payment Successful</h1>
 
-    async function loadPin() {
-      try {
-        const res = await fetch(`${endpoint}?session_id=${encodeURIComponent(sessionId)}`);
+  <div id="content">
+    <div class="spinner"></div>
+    <p id="status">Retrieving your PIN...</p>
+  </div>
 
-        if (!res.ok) {
-          throw new Error("Network error");
-        }
+  <div class="footer">
+    Thank you for your purchase.
+  </div>
 
-        const data = await res.json();
+</div>
 
-        console.log("Response:", data); // for debugging
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const sessionId = params.get("session_id");
 
-        if (data.pin) {
-          statusEl.textContent = `✅ Your PIN: ${data.pin}`;
-          return;
-        }
+  // CHANGE THIS ONLY IF YOUR SUPABASE PROJECT CHANGES
+  const endpoint =
+    "https://rqwtesbhddfbklpkrlcv.supabase.co/functions/v1/get-pin";
 
-        if (data.status === "pending" && tries < maxTries) {
-          tries++;
-          statusEl.textContent = "⏳ Finalizing your PIN, please wait...";
-          setTimeout(loadPin, 1500);
-          return;
-        }
+  const content = document.getElementById("content");
+  const statusEl = document.getElementById("status");
 
-        statusEl.textContent =
-          "⚠️ Payment complete, but PIN not ready. Please refresh or contact support.";
-      } catch (e) {
-        console.error(e);
-        statusEl.textContent = "❌ Error loading PIN. Please refresh.";
+  let tries = 0;
+  const maxTries = 15;
+
+  async function loadPin() {
+    try {
+      const res = await fetch(
+        `${endpoint}?session_id=${encodeURIComponent(sessionId)}`
+      );
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch PIN");
       }
-    }
 
-    if (!sessionId) {
-      statusEl.textContent = "❌ Missing session ID.";
-    } else {
-      loadPin();
+      const data = await res.json();
+
+      if (data.pin) {
+        content.innerHTML = `
+          <p>Your PIN is ready:</p>
+
+          <div class="pin-box">${data.pin}</div>
+
+          <button id="copyBtn">
+            📋 Copy PIN
+          </button>
+
+          <button class="print-btn" onclick="window.print()">
+            🖨 Print
+          </button>
+
+          <div id="copyMessage" class="copy-message">
+            ✅ PIN copied to clipboard!
+          </div>
+
+          <p style="margin-top:25px;color:#666;">
+            Please save this PIN for your records.
+          </p>
+        `;
+
+        document
+          .getElementById("copyBtn")
+          .addEventListener("click", async () => {
+            try {
+              await navigator.clipboard.writeText(data.pin);
+              document.getElementById("copyMessage").style.display = "block";
+            } catch (err) {
+              alert("Unable to copy PIN. Please copy it manually.");
+            }
+          });
+
+        return;
+      }
+
+      if (data.status === "pending" && tries < maxTries) {
+        tries++;
+        statusEl.textContent =
+          "⏳ Finalizing your PIN, please wait...";
+        setTimeout(loadPin, 1500);
+        return;
+      }
+
+      content.innerHTML = `
+        <p>⚠️ Payment completed, but your PIN is not ready yet.</p>
+        <p>Please refresh this page in a few moments.</p>
+      `;
+    } catch (err) {
+      console.error(err);
+
+      content.innerHTML = `
+        <p>❌ Unable to retrieve your PIN.</p>
+
+        <button onclick="location.reload()">
+          Refresh Page
+        </button>
+      `;
     }
-  </script>
+  }
+
+  if (!sessionId) {
+    content.innerHTML = `
+      <p>❌ Missing Session ID.</p>
+    `;
+  } else {
+    loadPin();
+  }
+</script>
+
 </body>
 </html>
