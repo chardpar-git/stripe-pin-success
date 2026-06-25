@@ -12,7 +12,7 @@
 
 body{
   margin:0;
-  font-family:Arial,Helvetica,sans-serif;
+  font-family:Arial, Helvetica, sans-serif;
   background:
     radial-gradient(circle at top left,
       rgba(255,255,255,.12),
@@ -28,82 +28,85 @@ body{
 .card{
   background:#fff;
   width:100%;
-  max-width:650px;
-  border-radius:30px;
-  padding:50px;
+  max-width:520px;
+  border-radius:25px;
+  padding:30px;
   text-align:center;
   box-shadow:0 20px 50px rgba(0,0,0,.25);
 }
 
 .logo img{
-  width:130px;
-  margin-bottom:20px;
+  width:80px;
+  margin-bottom:15px;
 }
 
 .logo h2{
   margin:0;
   color:#13274f;
-  font-size:48px;
+  font-size:28px;
   letter-spacing:2px;
 }
 
 .check-icon{
-  width:80px;
-  height:80px;
-  border:3px solid #4CAF50;
+  width:70px;
+  height:70px;
+  border:3px solid #22c55e;
   border-radius:50%;
-  margin:30px auto;
+  margin:25px auto;
   display:flex;
   justify-content:center;
   align-items:center;
-  color:#4CAF50;
-  font-size:42px;
+  color:#22c55e;
+  font-size:36px;
+  font-weight:bold;
 }
 
 h1{
-  color:#0ca63b;
-  margin-bottom:15px;
-  font-size:48px;
+  margin:0;
+  color:#16a34a;
+  font-size:32px;
 }
 
 .subtitle{
-  color:#5f6c7b;
-  font-size:28px;
+  color:#64748b;
+  margin-top:15px;
   line-height:1.5;
+  font-size:18px;
 }
 
 .pin-title{
-  margin-top:50px;
+  margin-top:30px;
   color:#13274f;
-  font-size:38px;
+  font-size:22px;
   font-weight:bold;
 }
 
 .pin-box{
-  margin-top:20px;
-  background:#f5f7fb;
-  border:3px dashed #b8c4d6;
-  border-radius:20px;
-  padding:30px;
-  font-size:80px;
+  margin-top:15px;
+  background:#f8fafc;
+  border:2px dashed #cbd5e1;
+  border-radius:15px;
+  padding:20px;
+  font-size:48px;
   font-weight:bold;
-  color:#0046d5;
-  letter-spacing:18px;
+  color:#0052ff;
+  letter-spacing:8px;
+  word-break:break-all;
 }
 
 .buttons{
-  margin-top:35px;
+  margin-top:25px;
 }
 
 button{
   border:none;
-  border-radius:12px;
-  padding:18px 30px;
-  font-size:24px;
+  border-radius:10px;
+  padding:14px 24px;
+  font-size:16px;
   color:#fff;
   cursor:pointer;
-  margin:10px;
-  min-width:220px;
+  margin:5px;
+  min-width:160px;
 }
 
 .copy-btn{
@@ -111,47 +114,46 @@ button{
 }
 
 .print-btn{
-  background:#0ca63b;
+  background:#16a34a;
 }
 
 button:hover{
-  opacity:.9;
+  opacity:0.9;
 }
 
 .copy-message{
   display:none;
-  margin-top:30px;
-  background:#edf8ef;
-  border:1px solid #b8e1c0;
-  color:#0ca63b;
-  padding:18px;
-  border-radius:12px;
-  font-size:22px;
+  margin-top:20px;
+  background:#ecfdf5;
+  border:1px solid #bbf7d0;
+  color:#15803d;
+  padding:14px;
+  border-radius:10px;
   font-weight:bold;
 }
 
 .notice{
-  margin-top:40px;
-  color:#5f6c7b;
-  font-size:22px;
-  line-height:1.5;
+  margin-top:25px;
+  color:#64748b;
+  font-size:15px;
+  line-height:1.6;
 }
 
 .footer{
-  margin-top:50px;
-  padding-top:30px;
-  border-top:1px solid #e5e7eb;
-  color:#777;
-  font-size:22px;
+  margin-top:30px;
+  padding-top:20px;
+  border-top:1px solid #e2e8f0;
+  color:#64748b;
+  font-size:14px;
 }
 
 .spinner{
-  width:55px;
-  height:55px;
-  border:6px solid #f3f3f3;
-  border-top:6px solid #0052ff;
+  width:45px;
+  height:45px;
+  border:5px solid #f1f5f9;
+  border-top:5px solid #0052ff;
   border-radius:50%;
-  margin:30px auto;
+  margin:25px auto;
   animation:spin 1s linear infinite;
 }
 
@@ -161,43 +163,49 @@ button:hover{
   }
 }
 
-@media(max-width:700px){
+/* Tablets and phones */
+@media (max-width:768px){
 
   .card{
-    padding:35px 20px;
+    max-width:95%;
+    padding:25px 20px;
+  }
+
+  .logo img{
+    width:70px;
   }
 
   .logo h2{
-    font-size:32px;
+    font-size:24px;
   }
 
   h1{
-    font-size:34px;
-  }
-
-  .subtitle{
-    font-size:20px;
-  }
-
-  .pin-title{
     font-size:28px;
   }
 
+  .subtitle{
+    font-size:16px;
+  }
+
+  .pin-title{
+    font-size:20px;
+  }
+
   .pin-box{
-    font-size:50px;
-    letter-spacing:8px;
-    padding:25px;
+    font-size:36px;
+    letter-spacing:5px;
+    padding:18px;
   }
 
   button{
     width:100%;
-    font-size:18px;
+    margin:8px 0;
     min-width:auto;
   }
 
   .footer,
   .notice{
-    font-size:16px;
+    font-size:13px;
   }
 }
 </style>
@@ -213,16 +221,18 @@ button:hover{
   </div>
 
   <div id="content">
+
     <div class="check-icon">✓</div>
 
     <h1>Payment Successful!</h1>
 
     <div class="subtitle">
       Thank you for your purchase.<br>
-      Your PIN is being retrieved.
+      Retrieving your PIN...
     </div>
 
     <div class="spinner"></div>
+
   </div>
 
   <div class="footer">
@@ -243,17 +253,19 @@ const maxTries = 15;
 
 const content = document.getElementById("content");
 
-async function loadPin(){
-
-  try{
-
+async function loadPin() {
+  try {
     const res = await fetch(
       `${endpoint}?session_id=${encodeURIComponent(sessionId)}`
     );
 
+    if (!res.ok) {
+      throw new Error("Failed to retrieve PIN");
+    }
+
     const data = await res.json();
 
-    if(data.pin){
+    if (data.pin) {
 
       content.innerHTML = `
         <div class="check-icon">✓</div>
@@ -262,11 +274,11 @@ async function loadPin(){
 
         <div class="subtitle">
           Thank you for your purchase.<br>
-          Your PIN is ready below.
+          Your PIN is ready.
         </div>
 
         <div class="pin-title">
-          Your PIN is:
+          Your PIN
         </div>
 
         <div class="pin-box">
@@ -279,12 +291,13 @@ async function loadPin(){
           </button>
 
           <button class="print-btn"
-            onclick="window.print()">
+                  onclick="window.print()">
             🖨 Print
           </button>
         </div>
 
-        <div class="copy-message" id="copyMessage">
+        <div class="copy-message"
+             id="copyMessage">
           ✅ PIN copied to clipboard!
         </div>
 
@@ -294,46 +307,38 @@ async function loadPin(){
         </div>
       `;
 
-      document
-        .getElementById("copyBtn")
+      document.getElementById("copyBtn")
         .addEventListener("click", async () => {
-
-          try{
+          try {
             await navigator.clipboard.writeText(data.pin);
-
-            document.getElementById(
-              "copyMessage"
-            ).style.display = "block";
-
-          }catch(e){
+            document.getElementById("copyMessage")
+              .style.display = "block";
+          } catch {
             alert(
               "Unable to copy PIN. Please copy it manually."
             );
           }
-      });
+        });
 
       return;
     }
 
-    if(data.status === "pending" &&
-      tries < maxTries){
-
+    if (data.status === "pending" &&
+        tries < maxTries) {
       tries++;
-
-      setTimeout(loadPin,1500);
+      setTimeout(loadPin, 1500);
       return;
     }
 
     content.innerHTML = `
       <h1>PIN Not Ready</h1>
-
       <div class="subtitle">
         Payment completed successfully.<br>
         Please refresh this page in a few moments.
       </div>
     `;
 
-  }catch(err){
+  } catch (err) {
 
     console.error(err);
 
@@ -347,24 +352,21 @@ async function loadPin(){
       <br>
 
       <button class="copy-btn"
-        onclick="location.reload()">
+              onclick="location.reload()">
         Refresh Page
       </button>
     `;
   }
 }
 
-if(!sessionId){
-
+if (!sessionId) {
   content.innerHTML = `
     <h1>Missing Session ID</h1>
-
     <div class="subtitle">
       No session information was found.
     </div>
   `;
-}
-else{
+} else {
   loadPin();
 }
 </script>
